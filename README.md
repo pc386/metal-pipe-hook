@@ -6,13 +6,13 @@ A 10% chance of [metal pipe](https://www.youtube.com/watch?v=iDLmYZ5HqgM) every 
 
 Choose your agent below. Run the commands from the root of the project where you want the skill enabled. These are project installs, not global installs.
 
-You need [GitHub CLI](https://cli.github.com/) signed in with `gh auth login`. This repository is private, so your GitHub account must have access. Bash commands work on macOS, Linux, and Git Bash; a PowerShell version is below.
+No GitHub account or GitHub CLI is required. Bash commands use `curl` and work on macOS, Linux, and Git Bash; a PowerShell version is below.
 
 ### Claude Code
 
 ```bash
 mkdir -p .claude/skills/metal-pipe
-gh api repos/pc386/metal-pipe-skill/contents/metal-pipe/SKILL.md -H 'Accept: application/vnd.github.raw+json' > .claude/skills/metal-pipe/SKILL.md
+curl -fsSL https://raw.githubusercontent.com/pc386/metal-pipe-skill/main/metal-pipe/SKILL.md -o .claude/skills/metal-pipe/SKILL.md
 ```
 
 Append this to your project's `CLAUDE.md`:
@@ -27,7 +27,7 @@ Start a new Claude Code session. [Skill docs](https://code.claude.com/docs/en/sk
 
 ```bash
 mkdir -p .agents/skills/metal-pipe
-gh api repos/pc386/metal-pipe-skill/contents/metal-pipe/SKILL.md -H 'Accept: application/vnd.github.raw+json' > .agents/skills/metal-pipe/SKILL.md
+curl -fsSL https://raw.githubusercontent.com/pc386/metal-pipe-skill/main/metal-pipe/SKILL.md -o .agents/skills/metal-pipe/SKILL.md
 ```
 
 Append this to your project's `AGENTS.md`:
@@ -42,7 +42,7 @@ Start a new Codex chat in the project. [Skill docs](https://learn.chatgpt.com/do
 
 ```bash
 mkdir -p .cursor/skills/metal-pipe
-gh api repos/pc386/metal-pipe-skill/contents/metal-pipe/SKILL.md -H 'Accept: application/vnd.github.raw+json' > .cursor/skills/metal-pipe/SKILL.md
+curl -fsSL https://raw.githubusercontent.com/pc386/metal-pipe-skill/main/metal-pipe/SKILL.md -o .cursor/skills/metal-pipe/SKILL.md
 ```
 
 Append this to your project's `AGENTS.md`:
@@ -57,7 +57,7 @@ Start a new Agent chat in the project. [Skill docs](https://prod.cursor.com/docs
 
 ```bash
 mkdir -p .github/skills/metal-pipe
-gh api repos/pc386/metal-pipe-skill/contents/metal-pipe/SKILL.md -H 'Accept: application/vnd.github.raw+json' > .github/skills/metal-pipe/SKILL.md
+curl -fsSL https://raw.githubusercontent.com/pc386/metal-pipe-skill/main/metal-pipe/SKILL.md -o .github/skills/metal-pipe/SKILL.md
 ```
 
 Append this to your project's `.github/copilot-instructions.md`:
@@ -82,9 +82,7 @@ Use this instead of the Bash download commands. Set `$skillDir` to the directory
 ```powershell
 $skillDir = '.claude/skills/metal-pipe' # Change for your agent
 New-Item -ItemType Directory -Force -Path $skillDir | Out-Null
-$skillContent = gh api repos/pc386/metal-pipe-skill/contents/metal-pipe/SKILL.md -H 'Accept: application/vnd.github.raw+json'
-if ($LASTEXITCODE -ne 0) { throw 'Skill download failed. Check gh auth status and repository access.' }
-$skillContent | Set-Content -LiteralPath "$skillDir/SKILL.md" -Encoding utf8
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/pc386/metal-pipe-skill/main/metal-pipe/SKILL.md' -OutFile "$skillDir/SKILL.md" -ErrorAction Stop
 ```
 
 Then add the matching opt-in instruction from your agent's section and start a new session. Preserve existing instruction-file content. Install once per agent/project; if multiple agents share `AGENTS.md`, keep only one lottery instruction and point it to one installed skill.
