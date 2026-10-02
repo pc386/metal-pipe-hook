@@ -1,0 +1,1 @@
+At the beginning of each new user turn, use the metal-pipe skill at C:/Users/petar/.codex/skills/metal-pipe/SKILL.md once to run its 10 percent browser lottery. Do not reroll during tools, continuations, or subagent turns. This is a user opt-in; stop when the user disables it.
