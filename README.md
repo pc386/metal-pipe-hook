@@ -129,16 +129,6 @@ Create `~/.copilot/hooks/metal-pipe.json` for all projects, or `.github/hooks/me
 
 Start a new CLI session. If you set `COPILOT_HOME`, put the user hook in its `hooks` directory instead. [Copilot hook docs](https://docs.github.com/en/copilot/reference/hooks-reference)
 
-### Migrating from metal-pipe-skill
-
-Remove the old metal pipe paragraph from `AGENTS.md`, `CLAUDE.md`, or your other agent instructions. Remove the installed `metal-pipe` skill, or leave it unused. Start a new chat to discard the previous instructions. **Do not run the instruction-based lottery and the hook together:** that would create two chances per prompt.
-
-The repository was renamed from `metal-pipe-skill` to `metal-pipe-hook`. Existing Git clones can update their remote:
-
-```bash
-git remote set-url origin https://github.com/pc386/metal-pipe-hook.git
-```
-
 ## Behavior
 
 Each invocation draws one uniform integer from 0 through 9. Only 0 opens the fixed video URL in your default browser. Nothing is sent to a model, and the script does not read, store, or transmit hook input or prompt text. Browser launching is local; the browser then visits YouTube normally.
@@ -160,8 +150,5 @@ The tests mock browser launching: they check all ten outcomes, dry-run behavior,
 
 Remove only this command's hook entry from your agent config, then restart the agent. Delete `~/.metal-pipe-hook` if you no longer need the script. To pause it in Codex, disable the entry in `/hooks`.
 
-Unlike the old skill, telling the model to stop does not disable an external command hook; disable the hook configuration instead.
+To stop the lottery, disable its hook configuration.
 
-## Skill fallback
-
-For agents without command hooks, the original [metal-pipe skill](metal-pipe/SKILL.md) and [per-turn instruction](metal-pipe-global-instruction.md) remain available. Install them using your agent's skill and instruction system. That fallback relies on model instruction-following and is less reliable than a prompt hook. Use one approach at a time.
