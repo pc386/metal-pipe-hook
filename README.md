@@ -129,6 +129,63 @@ Create `~/.copilot/hooks/metal-pipe.json` for all projects, or `.github/hooks/me
 
 Start a new CLI session. If you set `COPILOT_HOME`, put the user hook in its `hooks` directory instead. [Copilot hook docs](https://docs.github.com/en/copilot/reference/hooks-reference)
 
+## Desktop app tutorials
+
+These instructions are for desktop sessions that run local command hooks. Having a chat app or local file access alone does not enable a prompt hook.
+
+| App / mode | This hook |
+| --- | --- |
+| Codex desktop, local session | Uses the Codex hook configuration below |
+| ChatGPT Work, local-only orchestration and execution | Supported by the documented local hook system; confirm your session actually uses this mode |
+| ChatGPT Work with cloud orchestration, including local computer access | Local command hooks are not supported |
+| Ordinary ChatGPT chat | No documented installation route for this local prompt hook |
+| Claude Desktop, Code tab, Local environment | Uses the Claude Code settings below |
+| Claude Chat / Cowork | This tutorial does not establish support for local Claude Code command hooks in these modes |
+
+### ChatGPT / Codex desktop
+
+1. Download the script using [Install](#install). This setup step uses Terminal on macOS/Linux or PowerShell on Windows; afterward you can chat in the GUI.
+2. Open your home configuration folder in a file manager. On Windows, paste `%USERPROFILE%\.codex` into File Explorer's address bar. On macOS, press **Cmd+Shift+G** in Finder and enter `~/.codex`. Create the folder if needed.
+3. Open or create `hooks.json` in a plain-text editor. Merge in the [Codex configuration](#codex), replacing the script path with your full downloaded path. Save as `hooks.json`, not `hooks.json.txt`.
+4. Review the hook once through the documented CLI route: open a terminal, run `codex`, then enter `/hooks`. Inspect and trust the metal-pipe command. Use the same user/configuration directory as the desktop app. The official documentation does not establish a GUI-only trust flow, so this tutorial does not assume a Hooks settings button exists.
+5. Return to the desktop app and start a **new local Codex session**. For ChatGPT Work, use this setup only if your environment supports local-only orchestration and execution. Selecting Work or granting local computer access does not by itself establish that condition.
+6. Send a normal message. The hook runs independently of the model and may open the video. If it does not, follow [Test from the GUI](#test-from-the-gui) before concluding it failed.
+
+If you only have ordinary ChatGPT chat or cloud-orchestrated Work, this script has no supported per-message installation path there. Use a local Codex session for this tutorial.
+
+Sources: [desktop app](https://learn.chatgpt.com/docs/app), [hook configuration and trust](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks), [local versus cloud hook support](https://learn.chatgpt.com/docs/hooks#managed-hooks-from-requirementstoml).
+
+### Claude Desktop
+
+1. Open Claude Desktop and select the **Code** tab.
+2. Choose **Local**, then **Select folder**, and pick a project folder. This tutorial uses native local execution, rather than Cloud, SSH, or WSL.
+3. Download the script using [Install](#install).
+4. Open the settings folder: on Windows, paste `%USERPROFILE%\.claude` into File Explorer; on macOS, use Finder's **Cmd+Shift+G** and enter `~/.claude`. Create the folder if needed.
+5. Open or create `settings.json` in a plain-text editor. Merge in the [Claude Code configuration](#claude-code) with your full script path. Preserve existing settings and save as `settings.json`, not `settings.json.txt`.
+6. Start a new **Code → Local** session in your project and complete any normal workspace trust prompts. Desktop and CLI share these hook settings; the CLI is not required to use the Code tab.
+7. Send a normal message and follow the checks below. Do not assume this Code-tab configuration also installs the hook into Claude Chat or Cowork.
+
+Sources: [Desktop quickstart](https://code.claude.com/docs/en/desktop-quickstart), [shared desktop settings](https://code.claude.com/docs/en/desktop), [hooks reference](https://code.claude.com/docs/en/hooks).
+
+### Test from the GUI
+
+First, ask the agent in your **local** desktop session:
+
+> Run my installed metal_pipe.py with --dry-run, using its full path and a working Python interpreter. Show me the result. Do not edit the script or hook configuration.
+
+A result such as `roll=7; would_open=False` verifies that the script runs. It does **not** prove that the app invoked the hook automatically.
+
+To test browser launching without waiting for a random hit, ask:
+
+> Load my installed metal_pipe.py with Python's runpy.run_path and call its open_video function once. This is a manual test: open the configured video in my browser, and do not change the lottery odds or hook configuration.
+
+The agent may request the host's normal execution approval. A successful manual test proves browser access from that execution environment, not automatic hook registration.
+
+Finally, start a fresh session and send ordinary messages without asking the agent to run the script. Each registered prompt event has a 10% chance. Ten messages can all miss. If nothing happens, check the config's exact file name, absolute paths, available Python interpreter, session mode, and hook trust state. GUI apps may have a different PATH from your terminal.
+
+These tutorials are based on the linked vendor documentation. The project's automated tests validate the script, not every desktop app/version. Browser autoplay may still require clicking Play.
+
+
 ## Behavior
 
 Each invocation draws one uniform integer from 0 through 9. Only 0 opens the fixed video URL in your default browser. Nothing is sent to a model, and the script does not read, store, or transmit hook input or prompt text. Browser launching is local; the browser then visits YouTube normally.
